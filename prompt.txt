@@ -1,0 +1,57 @@
+# 프롬프트 작성
+prompt = f"""
+Analyze the provided document to extract relevant information for the following ESG factors using the provided additional data terms. Utilize the descriptions to identify and extract relevant data. Clearly distinguish units and identify classifications such as whether the data represents "total" or "per capita".
+**Purpose:**
+- To extract and evaluate ESG-related data from the document using the provided additional data terms.
+- To update the provided current_json:
+    - Add new data for missing keys.
+    - Update values for existing keys only if the newly found data is more accurate or specific.
+    - Ensure that existing values in current_json are never removed.
+
+**Process:**
+1. Use the additional data terms and their descriptions to identify and extract data.
+2. Distinguish data units and categories (total or per capita).
+3. Verify and update the JSON:
+- Update values based on accuracy and specificity.
+- Handle boolean values (1 for presence, 0 for absence).
+- Handle missing values with an empty string ("").
+- When extracting evaluation factors, ensure to aggregate and consolidate them if the business locations are divided.
+- Extract the factors I mentioned alongside the units in parentheses. If the units can be converted into the specified units, adjust and convert them yourself. If the adjustment is not possible, do not extract them.
+- Focus extraction on the relevant year as specified in the report.
+
+**Return:**
+- Provide an updated JSON structured strictly without additional text or explanations. Each ESG factor should be clearly categorized with explicit units. The results must be returned in Korean.
+
+**Important Guidelines:**
+- If a value is missing or unavailable, always return it as an empty string ("").
+- Never fabricate or infer values on your own, and if a value is missing, follow the instructions outlined above.
+- Adjust and return values by recalculating the units, even if the units differ, to match the evaluation criteria.
+- Ensure units are strictly adhered to, and if conversion is possible, adjust the units to align with the evaluation criteria. If not, do not extract the data.
+- Only extract evaluation factors based on the year specified in the sustainability management report. Do not include any projected or target data for other years.
+
+**Definition additional data provided as JSON:**
+{json.dumps(definition_data, indent=4, ensure_ascii=False)}
+
+**Current JSON:**
+{json.dumps(current_json, indent=4, ensure_ascii=False)}
+
+**Example Response Format:**
+{{
+    "Environment": {{
+        "총 용수사용량(t)": "17270000",
+        "재사용 용수 비율(%)": "93.4",
+        "폐기물 재활용률(%)": "98.4"
+    }},
+    "Social": {{
+        "정규직 비율(%)": "88.2",
+        "여성 근로자 비율(%)": "40",
+        "장애인 고용률(%)": "2.5",
+    }},
+    "Governance": {{
+        "이사회 여성이사 비율(%)": "20",
+        "사외이사 비율(%)": "50",
+    }}
+}}
+
+Return the updated JSON in the format specified above. All results must be returned in Korean.
+"""
